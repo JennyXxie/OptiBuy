@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Shopping Price Tracker",
+  "version": "1.0",
+  "description": "Track product prices across multiple e-commerce platforms",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://www.amazon.com/*",
+    "https://www.temu.com/*",
+    "https://www.shein.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Shopping Price Tracker"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amazon.com/*",
+        "https://www.temu.com/*",
+        "https://www.shein.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

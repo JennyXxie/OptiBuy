@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Price Tracker</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛍️ Price Tracker</h1>
+            <p>Find the best deals across multiple platforms</p>
+        </header>
+
+        <div id="slot-filling-dialog" class="dialog">
+            <!-- Step 1: Product Name (Required) -->
+            <div id="step-product-name" class="step active">
+                <h2>What product are you looking for?</h2>
+                <div class="input-group">
+                    <input type="text" id="product-name" placeholder="e.g., iPhone 15, Nike Air Max, Gaming Laptop" required>
+                    <button id="next-step-1" class="btn btn-primary">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Rating Filter (Optional) -->
+            <div id="step-rating" class="step">
+                <h2>Minimum Rating Preference</h2>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="rating" value="no-preference" checked>
+                        <span>No preference</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="rating" value="4.5">
+                        <span>≥4.5★</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="rating" value="4.0">
+                        <span>≥4.0★</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="rating" value="3.5">
+                        <span>≥3.5★</span>
+                    </label>
+                </div>
+                <div class="step-buttons">
+                    <button id="prev-step-2" class="btn btn-secondary">Back</button>
+                    <button id="next-step-2" class="btn btn-primary">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Source Filter (Optional) -->
+            <div id="step-source" class="step">
+                <h2>Preferred Platforms</h2>
+                <div class="options">
+                    <label class="option checkbox">
+                        <input type="checkbox" name="source" value="amazon">
+                        <span>Amazon</span>
+                    </label>
+                    <label class="option checkbox">
+                        <input type="checkbox" name="source" value="temu">
+                        <span>Temu</span>
+                    </label>
+                    <label class="option checkbox">
+                        <input type="checkbox" name="source" value="shein">
+                        <span>Shein</span>
+                    </label>
+                    <label class="option checkbox">
+                        <input type="checkbox" name="source" value="all" checked>
+                        <span>All supported</span>
+                    </label>
+                </div>
+                <div class="step-buttons">
+                    <button id="prev-step-3" class="btn btn-secondary">Back</button>
+                    <button id="next-step-3" class="btn btn-primary">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Description Need (Optional) -->
+            <div id="step-description" class="step">
+                <h2>Description Preference</h2>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="description" value="none" checked>
+                        <span>None</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="description" value="concise">
+                        <span>Concise overview</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="description" value="detailed">
+                        <span>Detailed spec summary</span>
+                    </label>
+                </div>
+                <div class="step-buttons">
+                    <button id="prev-step-4" class="btn btn-secondary">Back</button>
+                    <button id="search-products" class="btn btn-primary">Search Products</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Summary -->
+        <div id="confirmation" class="confirmation hidden">
+            <h2>Search Summary</h2>
+            <div id="summary-content"></div>
+            <div class="confirmation-buttons">
+                <button id="edit-search" class="btn btn-secondary">Edit</button>
+                <button id="confirm-search" class="btn btn-primary">Confirm & Search</button>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div id="results" class="results hidden">
+            <h2>Search Results</h2>
+            <div id="json-output" class="json-output"></div>
+            <div id="natural-language" class="natural-language"></div>
+            <div id="price-tracking-opt-in" class="price-tracking hidden">
+                <h3>Price Tracking</h3>
+                <p>Do you want me to track this for price drops?</p>
+                <div class="tracking-buttons">
+                    <button id="track-yes" class="btn btn-primary">Yes</button>
+                    <button id="track-no" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+            <button id="new-search" class="btn btn-primary">New Search</button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Searching for products...</p>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
