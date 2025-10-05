@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "/api/coupons/search/route": [
+      "static/chunks/73c2d9a3a06d2b60.js",
+      "static/chunks/d1d9ba7634557fbe.js",
+      "static/chunks/ff3840e873247090.js",
+      "static/chunks/7458afcf2282f104.js",
+      "static/chunks/0463504dc0989e6c.js",
+      "static/chunks/turbopack-f98a62862da44a06.js"
+    ]
+  }
+}
