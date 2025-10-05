@@ -7,12 +7,24 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { ProductDetailsTab } from "@/components/product-details-tab"
 
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
   timestamp: Date
+  products?: Array<{
+    name: string
+    price: number
+    platform: string
+    url: string
+    image?: string
+    rating?: number
+    reviews?: number
+    savings?: number
+  }>
 }
 
 const initialMessages: Message[] = [
@@ -28,6 +40,8 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [inputValue, setInputValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [currentProducts, setCurrentProducts] = useState<Message['products']>([])
+  const [currentQuery, setCurrentQuery] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -68,14 +82,23 @@ export default function ChatPage() {
       const data = await response.json()
 
       if (data.success) {
+        // Extract products from the response if available
+        let extractedProducts: Message['products'] = []
+        if (data.data.products) {
+          extractedProducts = data.data.products
+          setCurrentProducts(extractedProducts)
+          setCurrentQuery(inputValue.trim())
+        }
+
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: "assistant",
           content: data.data.response,
-          timestamp: new Date(data.data.timestamp)
+          timestamp: new Date(data.data.timestamp),
+          products: extractedProducts
         }
         setMessages(prev => [...prev, assistantMessage])
-        
+
         // Store session ID for future requests
         if (data.data.sessionId) {
           sessionStorage.setItem('chatSessionId', data.data.sessionId)
@@ -106,7 +129,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="text-center mb-8">
         <div className="flex items-center justify-center space-x-3 mb-4">
           <Image 
@@ -124,7 +147,11 @@ export default function ChatPage() {
         </p>
       </div>
 
-      <Card className="h-[600px] flex flex-col">
+      {/* Split Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[700px]">
+        {/* Chat Section */}
+        <div className="lg:col-span-2">
+          <Card className="h-full flex flex-col">
         <CardContent className="flex-1 flex flex-col p-0">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
@@ -150,9 +177,10 @@ export default function ChatPage() {
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted"
                   }`}>
-                    <div className="whitespace-pre-wrap text-sm">
-                      {message.content}
-                    </div>
+                    <MarkdownRenderer 
+                      content={message.content}
+                      className="text-sm"
+                    />
                     <div className={`text-xs mt-1 opacity-70 ${
                       message.role === "user" ? "text-right" : "text-left"
                     }`}>
@@ -222,7 +250,17 @@ export default function ChatPage() {
             </div>
           </div>
         </CardContent>
-      </Card>
+          </Card>
+        </div>
+
+        {/* Product Details Tab */}
+        <div className="lg:col-span-1">
+          <ProductDetailsTab 
+            products={currentProducts || []} 
+            query={currentQuery} 
+          />
+        </div>
+      </div>
     </div>
   )
 }

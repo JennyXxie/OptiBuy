@@ -29,19 +29,19 @@ function generateFallbackResponse(prompt: string): string {
   const lowerPrompt = prompt.toLowerCase()
   
   if (lowerPrompt.includes('laptop') || lowerPrompt.includes('computer')) {
-    return `I'd be happy to help you find laptop deals! 💻\n\nHere are some great options I found:\n\n**MacBook Air M2 13"**\n• Amazon: $1,199\n• Temu: $1,099 (Save $100!)\n\n**Dell XPS 13**\n• Amazon: $999\n• Shein: $899 (Save $100!)\n\n**Budget Gaming Laptop**\n• eBay: $599 (Refurbished)\n• Walmart: $649 (New)\n\n**My recommendation:** For the best value, check out Temu and eBay for significant savings. Would you like me to set up a price alert for any specific model?`
+    return `I'd be happy to help you find laptop deals! 💻\n\n**🏆 TOP LAPTOP DEALS:**\n\n🥇 **MacBook Air M2 13"**\n   💵 Amazon: $1,199 | Temu: $1,099 (Save $100!)\n   🔗 [View on Amazon →](https://amazon.com/search?k=macbook+air+m2)\n   🔗 [View on Temu →](https://temu.com/search?q=macbook+air+m2)\n\n🥈 **Dell XPS 13**\n   💵 Amazon: $999 | Shein: $899 (Save $100!)\n   🔗 [View on Amazon →](https://amazon.com/search?k=dell+xps+13)\n   🔗 [View on Shein →](https://shein.com/search?k=dell+xps+13)\n\n🥉 **Budget Gaming Laptop**\n   💵 eBay: $599 (Refurbished) | Walmart: $649 (New)\n   🔗 [View on eBay →](https://ebay.com/search?k=gaming+laptop)\n   🔗 [View on Walmart →](https://walmart.com/search?q=gaming+laptop)\n\n**💡 My recommendation:** For the best value, check out Temu and eBay for significant savings. Would you like me to set up a price alert for any specific model?`
   }
   
   if (lowerPrompt.includes('headphone') || lowerPrompt.includes('earphone')) {
-    return `Great choice! I found some excellent headphone deals! 🎧\n\n**Wireless Bluetooth Headphones**\n• Amazon: $89.99\n• Temu: $45.99 (Save $44!) 🏆\n• eBay: $52.99\n• Walmart: $67.99\n\n**Best Deal:** Temu has the lowest price at $45.99. There's also a 20% off coupon (TEMU20) that could save you even more!\n\nWould you like me to track this product or show you similar items?`
+    return `Great choice! I found some excellent headphone deals! 🎧\n\n**🏆 TOP HEADPHONE DEALS:**\n\n🥇 **Wireless Bluetooth Headphones**\n   💵 Temu: $45.99 (Save $44!) 🏆\n   🔗 [View on Temu →](https://temu.com/search?q=wireless+bluetooth+headphones)\n\n🥈 **Premium Noise-Canceling**\n   💵 Amazon: $89.99 | eBay: $52.99\n   🔗 [View on Amazon →](https://amazon.com/search?k=noise+canceling+headphones)\n   🔗 [View on eBay →](https://ebay.com/search?k=bluetooth+headphones)\n\n🥉 **Budget Options**\n   💵 Walmart: $67.99\n   🔗 [View on Walmart →](https://walmart.com/search?q=bluetooth+headphones)\n\n**Best Deal:** Temu has the lowest price at $45.99. There's also a 20% off coupon (TEMU20) that could save you even more!\n\nWould you like me to track this product or show you similar items?`
   }
   
   if (lowerPrompt.includes('phone') || lowerPrompt.includes('smartphone')) {
-    return `I can help you find smartphone deals! 📱\n\n**Current trending deals:**\n• iPhone 15: $799 (Amazon) vs $749 (Temu) - Save $50!\n• Samsung Galaxy S24: $999 (Amazon) vs $899 (eBay) - Save $100!\n• Google Pixel 8: $699 (Walmart) vs $649 (Temu) - Save $50!\n\n**My recommendation:** Check eBay for refurbished models with warranties, or Temu for new devices at lower prices. Would you like me to set up a price alert for a specific phone?`
+    return `I can help you find smartphone deals! 📱\n\n**🏆 TOP SMARTPHONE DEALS:**\n\n🥇 **iPhone 15**\n   💵 Amazon: $799 | Temu: $749 (Save $50!)\n   🔗 [View on Amazon →](https://amazon.com/search?k=iphone+15)\n   🔗 [View on Temu →](https://temu.com/search?q=iphone+15)\n\n🥈 **Samsung Galaxy S24**\n   💵 Amazon: $999 | eBay: $899 (Save $100!)\n   🔗 [View on Amazon →](https://amazon.com/search?k=samsung+galaxy+s24)\n   🔗 [View on eBay →](https://ebay.com/search?k=samsung+galaxy+s24)\n\n🥉 **Google Pixel 8**\n   💵 Walmart: $699 | Temu: $649 (Save $50!)\n   🔗 [View on Walmart →](https://walmart.com/search?q=google+pixel+8)\n   🔗 [View on Temu →](https://temu.com/search?q=google+pixel+8)\n\n**💡 My recommendation:** Check eBay for refurbished models with warranties, or Temu for new devices at lower prices. Would you like me to set up a price alert for a specific phone?`
   }
   
   if (lowerPrompt.includes('deal') || lowerPrompt.includes('cheap') || lowerPrompt.includes('budget')) {
-    return `I love helping you save money! 💰\n\n**Today's top deals:**\n• Electronics: Up to 50% off on Temu\n• Fashion: 30% off on Shein with code SHEIN30\n• Home goods: Amazon Prime deals ending soon\n• Gaming: eBay auction deals starting at $1\n\n**Best platform for your budget:**\n• **Temu**: Best for electronics and gadgets\n• **eBay**: Best for auctions and refurbished items\n• **Walmart**: Best for reliable shipping and returns\n• **Amazon**: Best for Prime benefits and fast delivery\n\nWhat category interests you most?`
+    return `I love helping you save money! 💰\n\n**🔥 TODAY'S TOP DEALS:**\n\n🥇 **Electronics** - Up to 50% off\n   🔗 [Shop Temu Electronics →](https://temu.com/category/electronics.html)\n\n🥈 **Fashion** - 30% off with code SHEIN30\n   🔗 [Shop Shein Fashion →](https://shein.com/category/women.html)\n\n🥉 **Home Goods** - Prime deals ending soon\n   🔗 [Shop Amazon Home →](https://amazon.com/gp/goldbox)\n\n💰 **Gaming** - Auctions starting at $1\n   🔗 [Shop eBay Gaming →](https://ebay.com/b/Video-Games/139973)\n\n**🏆 Best Platform Guide:**\n• **Temu**: Electronics & gadgets (lowest prices)\n• **eBay**: Auctions & refurbished items\n• **Walmart**: Reliable shipping & returns\n• **Amazon**: Prime benefits & fast delivery\n\nWhat category interests you most?`
   }
   
   return `I understand you're looking for: "${prompt}"\n\nI'm here to help you find the best deals! I can:\n• Compare prices across Amazon, Temu, eBay, and Walmart\n• Track price history and predict drops\n• Find active coupons and discounts\n• Give personalized recommendations\n\nTry asking me about specific products like "wireless headphones" or "laptop deals" and I'll show you the best options!`
@@ -98,6 +98,38 @@ function generateFallbackProductAnalysis(products: any[], userQuery: string): st
   const bestPrice = Math.min(...products.map(p => p.price))
   const bestProduct = products.find(p => p.price === bestPrice)
   const platforms = [...new Set(products.map(p => p.platform))]
+  
+  // Sort products by price for better presentation
+  const sortedProducts = products.sort((a, b) => a.price - b.price)
+  const topProducts = sortedProducts.slice(0, 5) // Show top 5 deals
 
-  return `I found ${products.length} products for "${userQuery}"! 🎯\n\n**Best Deal:**\n• ${bestProduct?.name}\n• Price: $${bestProduct?.price} on ${bestProduct?.platform}\n• Platform: ${bestProduct?.platform}\n\n**Available on:** ${platforms.join(', ')}\n\n**Price Range:** $${Math.min(...products.map(p => p.price))} - $${Math.max(...products.map(p => p.price))}\n\n**My Recommendation:** ${bestProduct?.platform} has the best price at $${bestProduct?.price}. ${bestProduct?.platform === 'temu' ? 'Temu often has the lowest prices but check shipping times.' : bestProduct?.platform === 'ebay' ? 'eBay is great for deals, especially refurbished items.' : 'This is a solid choice with good value.'}\n\nWould you like me to set up a price alert or show you similar products?`
+  let response = `I found ${products.length} products for "${userQuery}"! 🎯\n\n**🏆 TOP DEALS:**\n\n`
+  
+  topProducts.forEach((product, index) => {
+    const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '💰'
+    response += `${emoji} **${product.name}**\n`
+    response += `   💵 $${product.price} on ${product.platform}\n`
+    response += `   🔗 [View Product →](${product.url})\n\n`
+  })
+
+  response += `**📊 Summary:**\n`
+  response += `• Available on: ${platforms.join(', ')}\n`
+  response += `• Price Range: $${Math.min(...products.map(p => p.price))} - $${Math.max(...products.map(p => p.price))}\n`
+  response += `• Best Deal: ${bestProduct?.platform} at $${bestProduct?.price}\n\n`
+  
+  response += `**💡 My Recommendation:** ${bestProduct?.platform} has the best price at $${bestProduct?.price}. `
+  if (bestProduct?.platform.toLowerCase().includes('temu')) {
+    response += 'Temu often has the lowest prices but check shipping times.'
+  } else if (bestProduct?.platform.toLowerCase().includes('ebay')) {
+    response += 'eBay is great for deals, especially refurbished items.'
+  } else {
+    response += 'This is a solid choice with good value.'
+  }
+  
+  response += `\n\n**🎯 Quick Actions:**\n`
+  response += `• Click any "View Product →" link above to shop directly\n`
+  response += `• Ask me to set up price alerts for any product\n`
+  response += `• Request similar products or specific brands`
+
+  return response
 }

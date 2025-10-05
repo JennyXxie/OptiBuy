@@ -88,14 +88,35 @@ export async function POST(request: NextRequest) {
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        sessionId,
-        response: aiResponse,
-        timestamp: new Date().toISOString(),
-      },
-    })
+        // Prepare response data
+        const responseData: any = {
+          sessionId,
+          response: aiResponse,
+          timestamp: new Date().toISOString(),
+        }
+
+        // Add products data if available
+        if (containsSearchKeywords) {
+          const productQuery = extractProductQuery(validatedData.message)
+          const products = await ProductService.searchProducts(productQuery)
+          if (products.length > 0) {
+            responseData.products = products.slice(0, 5).map(product => ({
+              name: product.name,
+              price: product.price,
+              platform: product.platform,
+              url: product.url,
+              image: product.image,
+              rating: Math.random() * 2 + 3, // Mock rating for demo
+              reviews: Math.floor(Math.random() * 1000) + 100, // Mock reviews
+              savings: Math.random() * 50 + 10, // Mock savings
+            }))
+          }
+        }
+
+        return NextResponse.json({
+          success: true,
+          data: responseData,
+        })
   } catch (error) {
     console.error('Chat API error:', error)
     
