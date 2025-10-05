@@ -1,12 +1,11 @@
-// api/testApi.js
-import { fetchAmazonProducts } from "./serpapi.js";
+import { fetchAllProducts } from "./serpapi.js";
 
-const test = async () => {
-  console.log("🔍 Fetching SerpApi products...");
-  const results = await fetchAmazonProducts("wireless headphones");
-
-  console.log("\n✅ First 3 products:");
-  console.log(results.slice(0, 3)); // show first 3 products
-};
-
-test().catch(console.error);
+(async () => {
+  try {
+    const results = await fetchAllProducts("wireless headphones");
+    console.log(`✅ Got ${results.length} products total`);
+    console.log("First 5:", results.slice(0, 5));
+  } catch (err) {
+    console.error("❌ Error running test:", err.message);
+  }
+})();
