@@ -4,10 +4,15 @@ import { useState } from "react";
 import { Send, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface Message {
-  sender: "user" | "bot"; // restricts sender type
+  sender: "user" | "bot";
   text: string;
 }
 
@@ -18,44 +23,45 @@ export default function ChatPage() {
       text: "👋 Hi! I'm DealBot — your AI shopping assistant. What product are you looking for today?",
     },
   ]);
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // ✅ Explicitly type each message
     const userMessage: Message = { sender: "user", text: input };
-    setMessages((prev: Message[]) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/chat", {
+      // 👇 This sends the user's message to your /api/chat route
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
       if (data.success && data.data.response) {
         const botMessage: Message = {
           sender: "bot",
           text: data.data.response,
         };
-        setMessages((prev: Message[]) => [...prev, botMessage]);
+        setMessages((prev) => [...prev, botMessage]);
       } else {
-        setMessages((prev: Message[]) => [
+        setMessages((prev) => [
           ...prev,
           { sender: "bot", text: "❌ Sorry, something went wrong." },
         ]);
       }
     } catch (err) {
       console.error("Chat error:", err);
-      setMessages((prev: Message[]) => [
+      setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "⚠️ Failed to connect to server." },
+        { sender: "bot", text: "⚠️ Failed to connect to the server." },
       ]);
     } finally {
       setIsLoading(false);
