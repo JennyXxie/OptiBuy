@@ -1,7 +1,7 @@
 // api/serpapi.js
 import axios from "axios";
 import dotenv from "dotenv";
-import { supabase } from "../supabaseClient.js";
+import { supabase } from "./supabaseClient.js";
 
 dotenv.config();
 
