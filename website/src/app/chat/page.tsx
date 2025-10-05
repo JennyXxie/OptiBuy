@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { Send, Bot, User, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -48,9 +49,20 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
+  const searchQuery = useSearchParams().get('q')
+
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+    if (searchQuery && !inputValue) {
+      setInputValue(searchQuery)
+    }
+  }, [messages, searchQuery, inputValue])
+
+  useEffect(() => {
+    if (searchQuery && inputValue === searchQuery && !isLoading && messages.length === 1) {
+      handleSendMessage()
+    }
+  }, [searchQuery, inputValue, isLoading, messages.length])
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return

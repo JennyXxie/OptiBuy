@@ -8,71 +8,94 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from 'recharts'
 
 interface Alert {
   id: string
-  productName: string
+  alertName: string
+  productLink: string
   currentPrice: number
-  targetPrice: number
-  platform: string
   isActive: boolean
   createdAt: Date
+  priceHistory?: { date: string; price: number }[]
 }
 
 const mockAlerts: Alert[] = [
   {
     id: "1",
-    productName: "Wireless Bluetooth Headphones",
+    alertName: "Wireless Headphone Alert",
+    productLink: "https://www.amazon.com/dp/B0BP9LHL3P",
     currentPrice: 89.99,
-    targetPrice: 70.00,
-    platform: "amazon",
     isActive: true,
     createdAt: new Date("2024-01-15"),
+    priceHistory: [
+      { date: "2024-01-15", price: 95.00 },
+      { date: "2024-02-15", price: 92.50 },
+      { date: "2024-03-15", price: 90.00 },
+      { date: "2024-04-15", price: 89.99 },
+      { date: "2024-05-15", price: 87.50 },
+      { date: "2024-06-15", price: 85.00 },
+    ],
   },
   {
     id: "2",
-    productName: "Smart Fitness Tracker",
+    alertName: "Fitness Tracker Alert",
+    productLink: "https://www.temu.com/goods/6010000000000000.html",
     currentPrice: 129.99,
-    targetPrice: 100.00,
-    platform: "temu",
     isActive: true,
     createdAt: new Date("2024-01-10"),
+    priceHistory: [
+      { date: "2024-01-10", price: 135.00 },
+      { date: "2024-02-10", price: 132.00 },
+      { date: "2024-03-10", price: 130.00 },
+      { date: "2024-04-10", price: 129.99 },
+      { date: "2024-05-10", price: 128.00 },
+      { date: "2024-06-10", price: 125.00 },
+    ],
   },
   {
     id: "3",
-    productName: "Portable Phone Charger",
+    alertName: "Phone Charger Alert",
+    productLink: "https://www.shein.com/Portable-Charger-p-1234567.html",
     currentPrice: 29.99,
-    targetPrice: 20.00,
-    platform: "shein",
     isActive: false,
     createdAt: new Date("2024-01-05"),
+    priceHistory: [
+      { date: "2024-01-05", price: 32.00 },
+      { date: "2024-02-05", price: 31.00 },
+      { date: "2024-03-05", price: 30.00 },
+      { date: "2024-04-05", price: 29.99 },
+      { date: "2024-05-05", price: 28.00 },
+      { date: "2024-06-05", price: 27.00 },
+    ],
   },
 ]
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [openChartId, setOpenChartId] = useState<string | null>(null)
   const [newAlert, setNewAlert] = useState({
-    productName: "",
-    targetPrice: "",
-    platform: "amazon",
+    productLink: "",
+    alertName: "",
   })
 
   const handleCreateAlert = () => {
-    if (!newAlert.productName || !newAlert.targetPrice) return
+    if (!newAlert.productLink || !newAlert.alertName) return
 
     const alert: Alert = {
       id: Date.now().toString(),
-      productName: newAlert.productName,
+      alertName: newAlert.alertName,
+      productLink: newAlert.productLink,
       currentPrice: Math.random() * 100 + 20,
-      targetPrice: parseFloat(newAlert.targetPrice),
-      platform: newAlert.platform,
       isActive: true,
       createdAt: new Date(),
     }
 
     setAlerts(prev => [alert, ...prev])
-    setNewAlert({ productName: "", targetPrice: "", platform: "amazon" })
+    setNewAlert({ productLink: "", alertName: "" })
     setIsDialogOpen(false)
   }
 
@@ -116,33 +139,20 @@ export default function AlertsPage() {
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium">Product Name</label>
+                <label className="text-sm font-medium">Product Link</label>
                 <Input
-                  placeholder="Enter product name"
-                  value={newAlert.productName}
-                  onChange={(e) => setNewAlert(prev => ({ ...prev, productName: e.target.value }))}
+                  placeholder="Enter product link"
+                  value={newAlert.productLink}
+                  onChange={(e) => setNewAlert(prev => ({ ...prev, productLink: e.target.value }))}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Target Price</label>
+                <label className="text-sm font-medium">Alert Name</label>
                 <Input
-                  type="number"
-                  placeholder="Enter target price"
-                  value={newAlert.targetPrice}
-                  onChange={(e) => setNewAlert(prev => ({ ...prev, targetPrice: e.target.value }))}
+                  placeholder="Enter alert name"
+                  value={newAlert.alertName}
+                  onChange={(e) => setNewAlert(prev => ({ ...prev, alertName: e.target.value }))}
                 />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Platform</label>
-                <select
-                  className="w-full p-2 border rounded-md"
-                  value={newAlert.platform}
-                  onChange={(e) => setNewAlert(prev => ({ ...prev, platform: e.target.value }))}
-                >
-                  <option value="amazon">Amazon</option>
-                  <option value="temu">Temu</option>
-                  <option value="shein">Shein</option>
-                </select>
               </div>
               <Button onClick={handleCreateAlert} className="w-full">
                 Create Alert
@@ -171,13 +181,13 @@ export default function AlertsPage() {
             </Card>
           ) : (
             alerts.map((alert) => (
-              <Card key={alert.id}>
+              <Card key={alert.id} className="cursor-pointer" onClick={() => setOpenChartId(openChartId === alert.id ? null : alert.id)}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold mb-2">{alert.productName}</h3>
+                      <h3 className="font-semibold mb-2">{alert.alertName}</h3>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span>Platform: {alert.platform}</span>
+                        <span>Link: <a href={alert.productLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{alert.productLink.substring(0, 30)}...</a></span>
                         <span>•</span>
                         <span>Created: {alert.createdAt.toLocaleDateString()}</span>
                       </div>
@@ -186,12 +196,6 @@ export default function AlertsPage() {
                     <div className="text-right">
                       <div className="text-2xl font-bold text-primary">
                         {formatPrice(alert.currentPrice)}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Target: {formatPrice(alert.targetPrice)}
-                      </div>
-                      <div className="text-sm text-green-600">
-                        Save {formatPrice(getSavingsNeeded(alert.currentPrice, alert.targetPrice))} when reached
                       </div>
                     </div>
                     
@@ -202,12 +206,29 @@ export default function AlertsPage() {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => handleDeleteAlert(alert.id)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteAlert(alert.id)
+                        }}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
+                  {openChartId === alert.id && alert.priceHistory && (
+                    <div className="mt-4 h-48">
+                      <h4 className="text-lg font-semibold mb-2">Price History</h4>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={alert.priceHistory}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="date" />
+                          <YAxis />
+                          <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+                          <Line type="monotone" dataKey="price" stroke="#8884d8" activeDot={{ r: 8 }} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))
@@ -229,12 +250,6 @@ export default function AlertsPage() {
                 </div>
                 <div className="text-sm text-muted-foreground">Active Alerts</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
-                  {alerts.filter(a => a.currentPrice <= a.targetPrice).length}
-                </div>
-                <div className="text-sm text-muted-foreground">Targets Reached</div>
-              </div>
             </CardContent>
           </Card>
           
@@ -245,7 +260,7 @@ export default function AlertsPage() {
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <span>Set a target price for any product</span>
+                <span>Paste a product link to create an alert</span>
               </div>
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
@@ -253,7 +268,7 @@ export default function AlertsPage() {
               </div>
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <span>Get instant notifications when prices drop</span>
+                <span>Get instant notifications when prices drop by 10% or more</span>
               </div>
               <div className="flex items-start gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>

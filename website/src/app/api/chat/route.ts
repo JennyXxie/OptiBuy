@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { generateGeminiResponse, generateProductAnalysis } from '@/lib/gemini'
-import { ProductService } from '@/lib/product-service'
+import { processOptimizedChatFlow } from '@/lib/optimized-chat-flow'
 
 const chatSchema = z.object({
   message: z.string().min(1),
@@ -10,18 +9,7 @@ const chatSchema = z.object({
   userId: z.string().optional(),
 })
 
-// Helper function to extract product query from user message
-function extractProductQuery(message: string): string {
-  const lowerMessage = message.toLowerCase()
-  
-  // Remove common question words and search terms
-  const cleanedMessage = lowerMessage
-    .replace(/\b(find|search|look for|show me|recommend|best|cheap|deal|buy)\b/g, '')
-    .replace(/\b(headphones|laptop|phone|smartphone|computer|tablet|watch|tv|monitor)\b/g, (match) => match)
-    .trim()
-  
-  return cleanedMessage || message
-}
+// Process through optimized chat flow: User → Gemini → SerpAPI
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,75 +36,36 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Generate AI response with Gemini
-    let aiResponse: string
+    // Process through optimized chat flow: User → Gemini → SerpAPI
+    console.log(`🚀 Starting optimized chat flow for session: ${sessionId}`)
     
-    // Check if the message contains product search keywords
-    const searchKeywords = ['find', 'search', 'look for', 'show me', 'recommend', 'best', 'cheap', 'deal']
-    const containsSearchKeywords = searchKeywords.some(keyword => 
-      validatedData.message.toLowerCase().includes(keyword)
-    )
-
-    if (containsSearchKeywords) {
-      // Extract product query from message
-      const productQuery = extractProductQuery(validatedData.message)
-      
-      // Search for products
-      const products = await ProductService.searchProducts(productQuery)
-      
-      if (products.length > 0) {
-        // Generate AI analysis of products
-        aiResponse = await generateProductAnalysis(products, validatedData.message)
-      } else {
-        // Fallback to general response
-        aiResponse = await generateGeminiResponse(validatedData.message)
-      }
-    } else {
-      // General conversation
-      aiResponse = await generateGeminiResponse(validatedData.message)
-    }
+    const chatResult = await processOptimizedChatFlow(validatedData.message, sessionId)
 
     // Save AI response
     await prisma.chatMessage.create({
       data: {
         sessionId,
         role: 'assistant',
-        content: aiResponse,
+        content: chatResult.response,
       },
     })
 
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
+    // Prepare response data
+    const responseData: any = {
+      sessionId: chatResult.sessionId,
+      response: chatResult.response,
+      timestamp: chatResult.timestamp,
+    }
 
-        // Prepare response data
-        const responseData: any = {
-          sessionId,
-          response: aiResponse,
-          timestamp: new Date().toISOString(),
-        }
+    // Add products data if available
+    if (chatResult.products && chatResult.products.length > 0) {
+      responseData.products = chatResult.products
+    }
 
-        // Add products data if available
-        if (containsSearchKeywords) {
-          const productQuery = extractProductQuery(validatedData.message)
-          const products = await ProductService.searchProducts(productQuery)
-          if (products.length > 0) {
-            responseData.products = products.slice(0, 5).map(product => ({
-              name: product.name,
-              price: product.price,
-              platform: product.platform,
-              url: product.url,
-              image: product.image,
-              rating: Math.random() * 2 + 3, // Mock rating for demo
-              reviews: Math.floor(Math.random() * 1000) + 100, // Mock reviews
-              savings: Math.random() * 50 + 10, // Mock savings
-            }))
-          }
-        }
-
-        return NextResponse.json({
-          success: true,
-          data: responseData,
-        })
+    return NextResponse.json({
+      success: true,
+      data: responseData,
+    })
   } catch (error) {
     console.error('Chat API error:', error)
     

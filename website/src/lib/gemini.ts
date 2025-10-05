@@ -10,7 +10,7 @@ export async function generateGeminiResponse(prompt: string, context?: string): 
       return generateFallbackResponse(prompt)
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
     
     const fullPrompt = context 
       ? `Context: ${context}\n\nUser Query: ${prompt}\n\nAs OptiBuy's AI shopping assistant, provide helpful, accurate responses about product recommendations, price comparisons, and shopping advice. Focus on Amazon, Temu, eBay, and Walmart.`
@@ -55,7 +55,7 @@ export async function generateProductAnalysis(products: any[], userQuery: string
       return generateFallbackProductAnalysis(products, userQuery)
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
     
     const productData = products.map(p => ({
       name: p.name,
@@ -109,7 +109,7 @@ function generateFallbackProductAnalysis(products: any[], userQuery: string): st
     const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '💰'
     response += `${emoji} **${product.name}**\n`
     response += `   💵 $${product.price} on ${product.platform}\n`
-    response += `   🔗 [View Product →](${product.url})\n\n`
+    response += `   [View Product →](${product.url})\n\n`
   })
 
   response += `**📊 Summary:**\n`
