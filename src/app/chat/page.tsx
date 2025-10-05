@@ -4,16 +4,55 @@ import { useState } from "react";
 import { Send, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { safeParseAIResponse } from "@/lib/parseAIResponse";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Message {
   sender: "user" | "bot";
   text: string;
+}
+
+interface Product {
+  title: string;
+  price?: number | string;
+  reason?: string;
+  source?: string;
+  url?: string;
+}
+
+// 🧱 ProductCard subcomponent
+function ProductCard({ product }: { product: Product }) {
+  return (
+    <div className="border rounded-xl p-3 bg-white shadow-sm hover:shadow-md transition">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium">{product.title}</h3>
+        {product.price && (
+          <span className="text-green-600 font-semibold">
+            ${product.price}
+          </span>
+        )}
+      </div>
+
+      {product.reason && (
+        <p className="text-gray-600 mt-1 text-sm">{product.reason}</p>
+      )}
+
+      {product.source && (
+        <p className="text-gray-400 text-xs mt-1">{product.source}</p>
+      )}
+
+      {product.url && (
+        <a
+          href={product.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 text-sm mt-2 inline-block"
+        >
+          View Product →
+        </a>
+      )}
+    </div>
+  );
 }
 
 export default function ChatPage() {
@@ -36,21 +75,24 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // 👇 This sends the user's message to your /api/chat route
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
-
       const data = await res.json();
 
-      if (data.success && data.data.response) {
-        const botMessage: Message = {
-          sender: "bot",
-          text: data.data.response,
-        };
-        setMessages((prev) => [...prev, botMessage]);
+      if (data.success && data.data) {
+        const parsed = safeParseAIResponse(JSON.stringify(data.data), data.data);
+
+        const summary = parsed.ai_summary || "Here are some options I found:";
+        const products: Product[] = parsed.recommendations || [];
+
+        setMessages((prev) => [
+          ...prev,
+          { sender: "bot", text: summary },
+          { sender: "bot", text: JSON.stringify(products) },
+        ]);
       } else {
         setMessages((prev) => [
           ...prev,
@@ -80,34 +122,55 @@ export default function ChatPage() {
 
         <CardContent className="p-6 flex flex-col space-y-4">
           <div className="flex-1 overflow-y-auto max-h-[60vh] space-y-3 pr-2">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex ${
-                  msg.sender === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+            {messages.map((msg, i) => {
+              // Detect product list messages
+              if (msg.sender === "bot" && msg.text.startsWith("[")) {
+                try {
+                  const products: Product[] = JSON.parse(msg.text);
+                  return (
+                    <div key={i} className="flex justify-start">
+                      <div className="space-y-3 w-full">
+                        {products.map((p, idx) => (
+                          <ProductCard key={idx} product={p} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                } catch {
+                  return null;
+                }
+              }
+
+              // Normal chat bubbles
+              return (
                 <div
-                  className={`rounded-2xl px-4 py-2 max-w-[75%] text-sm ${
-                    msg.sender === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground"
+                  key={i}
+                  className={`flex ${
+                    msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {msg.sender === "user" ? (
-                    <div className="flex items-center gap-2">
-                      <span>{msg.text}</span>
-                      <User className="h-4 w-4 opacity-75" />
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Bot className="h-4 w-4 opacity-75" />
-                      <span>{msg.text}</span>
-                    </div>
-                  )}
+                  <div
+                    className={`rounded-2xl px-4 py-2 max-w-[75%] text-sm ${
+                      msg.sender === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
+                    }`}
+                  >
+                    {msg.sender === "user" ? (
+                      <div className="flex items-center gap-2">
+                        <span>{msg.text}</span>
+                        <User className="h-4 w-4 opacity-75" />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Bot className="h-4 w-4 opacity-75" />
+                        <span>{msg.text}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {isLoading && (
               <div className="text-muted-foreground text-sm italic">
