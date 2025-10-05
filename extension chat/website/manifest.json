@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "SmartCart",
+  "version": "1.0.0",
+  "description": "E-commerce Price Tracking Extension",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["storage", "activeTab", "tabs"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

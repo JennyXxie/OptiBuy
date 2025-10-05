@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "OctiBuy's DealBot",
+  "version": "1.0.0",
+  "description": "AI-powered shopping assistant for finding the best deals across platforms",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "OctiBuy's DealBot",
+    "default_icon": {
+      "16": "Logo_w.PNG",
+      "32": "Logo_w.PNG",
+      "48": "Logo_w.PNG",
+      "128": "Logo_w.PNG"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "Logo_w.PNG"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "Logo_w.PNG",
+    "32": "Logo_w.PNG",
+    "48": "Logo_w.PNG",
+    "128": "Logo_w.PNG"
+  }
+}

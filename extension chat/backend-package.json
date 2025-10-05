@@ -1,0 +1,30 @@
+{
+  "name": "optibuy-dealbot-backend",
+  "version": "1.0.0",
+  "description": "Backend API for OptiBuy DealBot Chrome Extension",
+  "main": "backend-api.js",
+  "scripts": {
+    "start": "node backend-api.js",
+    "dev": "nodemon backend-api.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "@google/generative-ai": "^0.2.1",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "optibuy",
+    "dealbot",
+    "chrome-extension",
+    "api",
+    "gemini",
+    "serpapi"
+  ],
+  "author": "OptiBuy Team",
+  "license": "MIT"
+}

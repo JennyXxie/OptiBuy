@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OptiBuy DealBot</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <img src="Logo_w.PNG" alt="OptiBuy" class="logo">
+        <div class="header-text">
+          <h1>DealBot</h1>
+          <p>AI Shopping Assistant</p>
+        </div>
+      </div>
+      <div class="status-indicator" id="statusIndicator">
+        <span class="status-dot"></span>
+        <span class="status-text">Online</span>
+      </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+      <!-- Messages Area -->
+      <div class="messages-container" id="messagesContainer">
+        <div class="message assistant-message" id="welcomeMessage">
+          <div class="message-avatar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="message-content">
+            <p>Hi! I'm DealBot, your AI shopping assistant. I can help you find the best deals, compare prices across platforms, and give you personalized shopping recommendations. What are you looking for today?</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions" id="quickActions">
+        <button class="quick-action-btn" data-query="Show me the best laptop deals">
+          💻 Laptop deals
+        </button>
+        <button class="quick-action-btn" data-query="Find wireless headphones under $50">
+          🎧 Headphones
+        </button>
+        <button class="quick-action-btn" data-query="What are today's best deals?">
+          🔥 Today's deals
+        </button>
+        <button class="quick-action-btn" data-query="Compare iPhone prices">
+          📱 iPhone prices
+        </button>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="messageInput" 
+            placeholder="Ask me about deals, compare prices, or get recommendations..."
+            autocomplete="off"
+          >
+          <button id="sendButton" class="send-button" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Panel (Hidden by default) -->
+    <div class="products-panel" id="productsPanel" style="display: none;">
+      <div class="products-header">
+        <h3>Found Products</h3>
+        <button id="closeProducts" class="close-btn">×</button>
+      </div>
+      <div class="products-list" id="productsList">
+        <!-- Products will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+      <div class="loading-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <span>DealBot is thinking...</span>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel" style="display: none;">
+      <div class="settings-header">
+        <h3>Settings</h3>
+        <button id="closeSettings" class="close-btn">×</button>
+      </div>
+      <div class="settings-content">
+        <div class="setting-item">
+          <label>Backend API Endpoint:</label>
+          <input type="text" id="backendUrl" placeholder="Enter your backend API URL">
+          <small>URL of your OptiBuy backend server</small>
+        </div>
+        <div class="setting-item">
+          <label>Session ID:</label>
+          <input type="text" id="sessionId" placeholder="Auto-generated" readonly>
+          <small>Your unique session identifier</small>
+        </div>
+        <button id="saveSettings" class="save-btn">Save Settings</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <button id="settingsBtn" class="footer-btn" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+        </svg>
+      </button>
+      <button id="productsBtn" class="footer-btn" title="View Products" style="display: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </button>
+      <button id="clearBtn" class="footer-btn" title="Clear Chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3,6 5,6 21,6"/>
+          <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
