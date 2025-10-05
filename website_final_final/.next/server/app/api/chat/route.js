@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/chat/route.js")
+R.c("server/chunks/3bb0e_next_324d419c._.js")
+R.c("server/chunks/3bb0e_zod_v4_83abe4a5._.js")
+R.c("server/chunks/3bb0e_axios_lib_a32d8948._.js")
+R.c("server/chunks/3bb0e_mime-db_709ee518._.js")
+R.c("server/chunks/3bb0e_c7dbab27._.js")
+R.c("server/chunks/[root-of-the-server]__1a6c324d._.js")
+R.m("[project]/Desktop/website/OptiBuy/.next-internal/server/app/api/chat/route/actions.js [app-rsc] (server actions loader, ecmascript)")
+R.m("[project]/Desktop/website/OptiBuy/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/Desktop/website/OptiBuy/src/app/api/chat/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/Desktop/website/OptiBuy/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/Desktop/website/OptiBuy/src/app/api/chat/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

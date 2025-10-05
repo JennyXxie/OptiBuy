@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/test-integration/route.js")
+R.c("server/chunks/[root-of-the-server]__d1fe2b6c._.js")
+R.c("server/chunks/3bb0e_next_ac380075._.js")
+R.c("server/chunks/Desktop_website_OptiBuy_src_lib_gemini_ts_06541b08._.js")
+R.c("server/chunks/[root-of-the-server]__3bf9cccf._.js")
+R.c("server/chunks/[root-of-the-server]__e9022cf0._.js")
+R.c("server/chunks/[root-of-the-server]__86cb4468._.js")
+R.m(31964)
+R.m(7627)
+module.exports=R.m(7627).exports
